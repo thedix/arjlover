@@ -29,7 +29,8 @@
 	}
 
 
-	mb_internal_encoding("UTF-8");
+	if (extension_loaded('mbstring'))
+		mb_internal_encoding("UTF-8");
 
 	// существующие файлы
 	$existing = array();
@@ -97,7 +98,9 @@
 		);
 
 		// получаем первую букву
-		$letter = mb_strtoupper(mb_substr($item['title'], 0, 1));
+		// если есть возможность, используем mbstring
+		$letter = extension_loaded('mbstring') ? mb_strtoupper(mb_substr($item['title'], 0, 1))
+		                                       : substr($item['title'], 0, 2);
 		if ($letter == 'Ё')
 			$letter = 'Е';
 		if (!in_array($letter, $ALPHABET))
