@@ -105,8 +105,9 @@
 
 		// если директория с буквой еще не создавалась, то создать ее
 		if (!isset($abc[$letter])) {
-			fwrite($fds['hardlink_abc'], "mkdir \"$2/$letter\"\n");
-			fwrite($fds['rename_abc'],   "mkdir \"$1/$letter\"\n");
+			$s = "mkdir \"$2/$letter\"\n";
+			fwrite($fds['hardlink_abc'], $s);
+			fwrite($fds['rename_abc'],   $s);
 			$abc[$letter] = true;
 		}
 
@@ -114,8 +115,8 @@
 
 		fwrite($fds['hardlink_flat'], "ln \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
 		fwrite($fds['hardlink_abc'],  "ln \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['rename_flat'],   "mv \"$1/{$item['fname']}\" \"$1/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['rename_abc'],    "mv \"$1/{$item['fname']}\" \"$1/$letter/{$item['title']}.{$item['ext']}\"\n");
+		fwrite($fds['rename_flat'],   "mv \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
+		fwrite($fds['rename_abc'],    "mv \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
 
 		// пропускаем, если есть такой файл и размеры совпадают
 		if (isset($existing[$item['fname']])) {
