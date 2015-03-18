@@ -117,12 +117,15 @@
 
 		$total_size += $size;
 
-		fwrite($fds['hardlink_flat'], "ln \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['hardlink_abc'],  "ln \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['symlink_flat'],  "ln -s \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['symlink_abc'],   "ln -s \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['rename_flat'],   "mv \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
-		fwrite($fds['rename_abc'],    "mv \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
+		$arg_flat = "\"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"";
+		$arg_abc  = "\"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"";
+
+		fwrite($fds['hardlink_flat'], "ln $arg_flat\n");
+		fwrite($fds['hardlink_abc'],  "ln $arg_abc\n");
+		fwrite($fds['symlink_flat'],  "ln -s $arg_flat\n");
+		fwrite($fds['symlink_abc'],   "ln -s $arg_abc\n");
+		fwrite($fds['rename_flat'],   "mv $arg_flat\n");
+		fwrite($fds['rename_abc'],    "mv $arg_abc\n");
 
 		// пропускаем, если есть такой файл и размеры совпадают
 		if (isset($existing[$item['fname']])) {
