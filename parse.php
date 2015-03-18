@@ -55,7 +55,7 @@
 	// открываем файлы скриптов
 	$s_init = "#!/bin/sh\n\n";
 	$fds = array();
-	foreach (array('rename_flat', 'rename_abc', 'hardlink_flat', 'hardlink_abc', 'delete') as $name) {
+	foreach (array('hardlink_flat', 'hardlink_abc', 'symlink_flat', 'symlink_abc', 'rename_flat', 'rename_abc', 'delete') as $name) {
 		$fds[$name] = fopen("out/$name.sh", 'w');
 		if (!$fds[$name])
 			die("Error creating file $name.sh");
@@ -110,6 +110,7 @@
 		if (!isset($abc[$letter])) {
 			$s = "mkdir \"$2/$letter\"\n";
 			fwrite($fds['hardlink_abc'], $s);
+			fwrite($fds['symlink_abc'], $s);
 			fwrite($fds['rename_abc'],   $s);
 			$abc[$letter] = true;
 		}
@@ -118,6 +119,8 @@
 
 		fwrite($fds['hardlink_flat'], "ln \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
 		fwrite($fds['hardlink_abc'],  "ln \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
+		fwrite($fds['symlink_flat'],  "ln -s \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
+		fwrite($fds['symlink_abc'],   "ln -s \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
 		fwrite($fds['rename_flat'],   "mv \"$1/{$item['fname']}\" \"$2/{$item['title']}.{$item['ext']}\"\n");
 		fwrite($fds['rename_abc'],    "mv \"$1/{$item['fname']}\" \"$2/$letter/{$item['title']}.{$item['ext']}\"\n");
 
